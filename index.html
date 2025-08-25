@@ -1,0 +1,455 @@
+https://github.com/Scoutlyai/scoutly/new/main
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoutly – AI Conversational Platform for Corporate Gifting</title>
+  <style>
+    /* Reset and basic styling */
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #333;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    /* Header navigation */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: transparent;
+      z-index: 100;
+    }
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+    header nav a {
+      margin-left: 20px;
+      font-weight: bold;
+      color: #ffffff;
+      transition: opacity 0.3s;
+    }
+    header nav a:hover {
+      opacity: 0.75;
+    }
+    /* Hero section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 20px 80px;
+      background: linear-gradient(135deg, #1f4378 0%, #69a3d0 100%);
+      color: #ffffff;
+    }
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+    .hero .cta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .hero .cta a {
+      background: #ffffff;
+      color: #1f4378;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .hero .cta a:hover {
+      background: #e0e0e0;
+    }
+    /* General section styling */
+    section {
+      padding: 80px 50px;
+    }
+    /* Features section */
+    .features {
+      background: #f9f9f9;
+      text-align: center;
+    }
+    .features h2 {
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: #1f4378;
+    }
+    .features .feature-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    .features .feature {
+      flex: 1 1 250px;
+      max-width: 300px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+    .features .feature h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 22px;
+      color: #1f4378;
+    }
+    .features .feature p {
+      font-size: 16px;
+      color: #555555;
+    }
+
+    /* Marketplace section */
+    .marketplace {
+      background: #ffffff;
+      text-align: center;
+    }
+    .marketplace h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #1f4378;
+    }
+    .marketplace .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    .marketplace .product {
+      flex: 1 1 250px;
+      max-width: 300px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .marketplace .product .image-placeholder {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #69a3d0, #1f4378);
+      color: #ffffff;
+      font-size: 24px;
+    }
+    .marketplace .product h3 {
+      margin: 15px 15px 10px;
+      font-size: 22px;
+      color: #1f4378;
+    }
+    .marketplace .product p {
+      margin: 0 15px 20px;
+      font-size: 16px;
+      color: #555555;
+    }
+
+    /* Pricing section */
+    .pricing {
+      background: #f9f9f9;
+      text-align: center;
+    }
+    .pricing h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #1f4378;
+    }
+    .pricing .plan-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    .pricing .plan {
+      flex: 1 1 250px;
+      max-width: 300px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+    }
+    .pricing .plan h3 {
+      margin-top: 0;
+      font-size: 22px;
+      color: #1f4378;
+      margin-bottom: 10px;
+    }
+    .pricing .plan .price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1f4378;
+      margin-bottom: 15px;
+    }
+    .pricing .plan p {
+      font-size: 16px;
+      color: #555555;
+      margin-bottom: 20px;
+    }
+    .pricing .plan ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin: 0;
+    }
+    .pricing .plan ul li {
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #555555;
+    }
+
+    /* Partners section */
+    .partners {
+      background: #ffffff;
+      text-align: center;
+    }
+    .partners h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #1f4378;
+    }
+    .partners p {
+      font-size: 18px;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      color: #555555;
+    }
+    .partners ul {
+      list-style: disc;
+      max-width: 600px;
+      margin: 0 auto;
+      padding-left: 20px;
+    }
+    .partners ul li {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #555555;
+    }
+    /* About section */
+    .about {
+      text-align: center;
+    }
+    .about h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #1f4378;
+    }
+    .about p {
+      font-size: 18px;
+      max-width: 800px;
+      margin: 0 auto;
+      color: #555555;
+      line-height: 1.6;
+    }
+    /* Contact section */
+    .contact {
+      background: #1f4378;
+      color: #ffffff;
+      text-align: center;
+    }
+    .contact h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    .contact p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .contact .contact-btn {
+      display: inline-block;
+      background: #ffffff;
+      color: #1f4378;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .contact .contact-btn:hover {
+      background: #e0e0e0;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #777777;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 10px 20px;
+      }
+      header nav a {
+        margin-left: 0;
+        margin-top: 10px;
+      }
+      .hero h1 {
+        font-size: 36px;
+      }
+      .hero p {
+        font-size: 18px;
+      }
+      .features .feature-list {
+        gap: 20px;
+      }
+      .features .feature {
+        max-width: 100%;
+      }
+      .marketplace .product-grid,
+      .pricing .plan-grid {
+        gap: 20px;
+      }
+      .marketplace .product,
+      .pricing .plan {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Scoutly</div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#about">How It Works</a>
+      <a href="#marketplace">Marketplace</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#partners">Retailers</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Transform Corporate Gifting with AI Conversations</h1>
+      <p>Scoutly empowers your corporate gifting strategy with intelligent, personalized conversations. Use Scoutly free – pay a commission only when a gift is purchased, and build stronger relationships with clients and colleagues.</p>
+      <div class="cta">
+        <a href="scoutly_demo.html">Try the Assistant</a>
+        <a href="#pricing">Get Started Free</a>
+        <a href="#features">Learn More</a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <h2>Features</h2>
+      <div class="feature-list">
+        <div class="feature">
+          <h3>Deep Personalization</h3>
+          <p>Our AI captures preferences and sentiment to tailor each gift, ensuring every recipient feels truly valued.</p>
+        </div>
+        <div class="feature">
+          <h3>Effortless Integration</h3>
+          <p>Scoutly integrates seamlessly with your CRM, HR, and workflow tools, automating gifting from selection to delivery.</p>
+        </div>
+        <div class="feature">
+          <h3>Actionable Insights</h3>
+          <p>Track engagement and return on investment with real-time analytics, enabling you to refine your gifting strategy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About/How It Works Section -->
+    <section id="about" class="about">
+      <h2>How It Works</h2>
+      <p>Scoutly combines state-of-the-art natural language processing with curated corporate gifting solutions. Our platform engages recipients in authentic conversations, capturing preferences and sentiment to select the ideal gift. By automating the discovery and fulfillment process, we save you time while ensuring every gift makes a lasting impression.</p>
+    </section>
+
+    <!-- Marketplace Section -->
+    <section id="marketplace" class="marketplace">
+      <h2>Explore Our Marketplace</h2>
+      <div class="product-grid">
+        <div class="product">
+          <div class="image-placeholder">Gift A</div>
+          <h3>Curated Luxury Box</h3>
+          <p>A thoughtful assortment of high-end items curated to impress.</p>
+        </div>
+        <div class="product">
+          <div class="image-placeholder">Gift B</div>
+          <h3>Executive Premium Desk Set</h3>
+          <p>Refined and functional office accessories for the modern executive.</p>
+        </div>
+        <div class="product">
+          <div class="image-placeholder">Gift C</div>
+          <h3>Artisanal Gourmet Basket</h3>
+          <p>A curated collection of artisanal treats perfect for celebrating special moments.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+      <h2>Plans &amp; Pricing</h2>
+      <div class="plan-grid">
+        <div class="plan">
+          <h3>Free</h3>
+          <div class="price">€0 / month</div>
+          <p>Get started with Scoutly at no cost. Pay a commission only when you make a sale.</p>
+          <ul>
+            <li>Access curated marketplace</li>
+            <li>AI-driven gift recommendations</li>
+            <li>Effortless ordering</li>
+          </ul>
+        </div>
+        <div class="plan">
+          <h3>Premium</h3>
+          <div class="price">€29 / month</div>
+          <p>Unlock advanced features designed for power users and larger teams.</p>
+          <ul>
+            <li>All Free features included</li>
+            <li>Enhanced analytics &amp; insights</li>
+            <li>Priority support</li>
+            <li>Exclusive gift selection</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partners" class="partners">
+      <h2>Retailers &amp; Partners</h2>
+      <p>Join the Scoutly marketplace and showcase your premium products to a growing network of corporate customers.</p>
+      <ul>
+        <li>Seamlessly integrate your catalogue into our platform</li>
+        <li>Reach engaged corporate gift buyers and decision-makers</li>
+        <li>Benefit from AI-driven promotion of your products</li>
+        <li>Receive sales insights and performance reports</li>
+      </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <h2>Ready to Join the Future of Gifting?</h2>
+      <p>Create your free account today or reach out to learn more about partnering with Scoutly.</p>
+      <a class="contact-btn" href="mailto:info@scoutly.com">Contact Us</a>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Scoutly. All rights reserved.
+  </footer>
+</body>
+</html>
