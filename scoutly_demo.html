@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoutly Gift Assistant Demo</title>
+  <style>
+    /* Basic reset */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 640px;
+      height: 90vh;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #chatbox {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .message {
+      margin-bottom: 12px;
+      display: flex;
+    }
+    .message.user {
+      justify-content: flex-end;
+    }
+    .message.assistant {
+      justify-content: flex-start;
+    }
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 14px;
+      max-width: 75%;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    .message.user .bubble {
+      background: #d3e5ff;
+      color: #003366;
+      border-bottom-right-radius: 0;
+    }
+    .message.assistant .bubble {
+      background: #e8e8e8;
+      color: #333;
+      border-bottom-left-radius: 0;
+    }
+    #input-area {
+      border-top: 1px solid #eee;
+      padding: 12px;
+      display: flex;
+    }
+    #input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    #send-btn {
+      margin-left: 10px;
+      padding: 10px 16px;
+      background-color: #007acc;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #send-btn:hover {
+      background-color: #005fa3;
+    }
+    /* Style suggestions list inside assistant messages */
+    .suggestions ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+    .suggestions li {
+      margin-bottom: 6px;
+    }
+    .suggestions strong {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chatbox"></div>
+    <div id="input-area">
+      <input id="input" type="text" placeholder="Type your message…" autocomplete="off" />
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Product catalogue embedded directly in the page.  These are
+    // high‑end corporate gifts with names, descriptions, prices and categories.
+    const products = [
+      { id: 1, name: 'Gift of Choice Collection', description: 'Custom collection of high-end gifts from Goody. Recipients can choose from premium brands like Gucci, Venus et Fleur, Tag Heuer, or electronics such as an iPad. Price points can be set from $100 to $5,000, giving employees a personal shopping experience in a premium gift shop.', price: 'From $15', category: 'Luxury Corporate Gift' },
+      { id: 2, name: 'Custom-Branded AirPods Pro (2nd Gen)', description: 'Apple AirPods Pro with company logo. Features immersive sound with Active Noise Cancellation and transparency mode for hearing surroundings. Offers 24 hours of battery life and twice the noise cancellation of previous generations.', price: '$269', category: 'Luxury Corporate Gift' },
+      { id: 3, name: 'Digital Photo Frame', description: 'High-resolution digital photo frame perfect for sentimental individuals. Displays photos via digital album with smart features like photo pairing, automatic color calibration, and free unlimited cloud storage.', price: '$149', category: 'Luxury Corporate Gift' },
+      { id: 4, name: 'Luxury Custom Swag Box', description: 'Create a luxury swag box full of premium apparel, branded merchandise, and tech gadgets. Work with Swag.com to build a box tailored to events, conferences, or welcome kits, with brands like Nike, TravisMathew, Allbirds, and Moleskine.', price: 'Custom quote', category: 'Luxury Corporate Gift' },
+      { id: 5, name: 'Premium Gifts for Employee Milestones', description: 'High-quality headphones, hard-sided coolers, and designer accessories recognizing employees’ 10+ years of service. Demonstrates commitment to quality and loyalty, enhancing the celebratory experience.', price: '$26.75', category: 'Luxury Corporate Gift' },
+      { id: 6, name: 'Fossil Eco Leather Watch', description: 'Eco-leather watch with green sunray dial and tan leather strap made from eco-friendly materials. Combines sustainability with stylish design for eco-conscious executives.', price: '$130', category: 'Luxury Corporate Gift' },
+      { id: 7, name: 'Mophie Multi-Device Travel Charger', description: 'Portable charger with built-in MagSafe-compatible magnets, providing 7.5W wireless charging for iOS and up to 15W for Android devices. Includes a 30W USB‑C wall charger, cable, and foldable travel case.', price: '$143.35', category: 'Luxury Corporate Gift' },
+      { id: 8, name: 'Branded YETI 8 Can Cooler', description: 'High-density, puncture-resistant cooler that holds up to eight cans with ice. Features a leakproof zipper and DryHide shell, making it durable for outdoor adventures.', price: '$275', category: 'Luxury Corporate Gift' },
+      { id: 9, name: 'Custom-Branded Self‑Heating Mug', description: 'Smart mug that allows users to set the precise temperature for their drink. Equipped with a built-in battery, charging coaster, auto sleep feature, smartphone control, and the option to customize with a company logo.', price: '$130', category: 'Premium Corporate Gift' },
+      { id: 10, name: 'Luxury Bath Box', description: 'Relaxation gift box containing all‑natural bath products like bath soaks and body cream. Designed to help busy executives unwind with a luxury spa experience.', price: '$150', category: 'Premium Corporate Gift' }
+    ];
+
+    // Append a chat message to the chatbox
+    function appendMessage(role, htmlContent) {
+      const chatbox = document.getElementById('chatbox');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message ' + role;
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML = htmlContent;
+      msgDiv.appendChild(bubble);
+      chatbox.appendChild(msgDiv);
+      // Scroll to bottom
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    // Preprocess user input into a set of lowercase tokens with non‑alphanumeric
+    // characters removed.  Stop words shorter than three characters are ignored.
+    function tokenize(text) {
+      return text.toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter(tok => tok && tok.length > 2);
+    }
+
+    // Compute gift suggestions by scoring how many tokens overlap with the
+    // product name, description or category.  Returns up to three matches.
+    function getSuggestions(message) {
+      const tokens = tokenize(message);
+      if (tokens.length === 0) {
+        return [];
+      }
+      // Score each product
+      const scored = products.map(product => {
+        let score = 0;
+        const name = product.name.toLowerCase();
+        const desc = product.description.toLowerCase();
+        const cat = product.category.toLowerCase();
+        tokens.forEach(tok => {
+          if (name.includes(tok)) score++;
+          if (desc.includes(tok)) score++;
+          if (cat.includes(tok)) score++;
+        });
+        return { product, score };
+      });
+      // Filter out zero scores
+      const filtered = scored.filter(item => item.score > 0);
+      // Sort descending by score, then by id to ensure deterministic order
+      filtered.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.product.id - b.product.id;
+      });
+      return filtered.slice(0, 3).map(item => item.product);
+    }
+
+    // Handle user sending message.  Generates suggestions locally based on
+    // embedded product data.
+    function handleUserMessage() {
+      const inputEl = document.getElementById('input');
+      const message = inputEl.value.trim();
+      if (message === '') return;
+      appendMessage('user', escapeHtml(message));
+      inputEl.value = '';
+      const suggestions = getSuggestions(message);
+      if (suggestions.length > 0) {
+        let reply = '<div class="suggestions">Here are some gift suggestions:<ul>';
+        suggestions.forEach(p => {
+          reply += '<li><strong>' + escapeHtml(p.name) + '</strong>: ' + escapeHtml(p.description) + '</li>';
+        });
+        reply += '</ul></div>';
+        appendMessage('assistant', reply);
+      } else {
+        appendMessage('assistant', 'I couldn\'t find an exact match. Could you provide more details about the recipient or the occasion?');
+      }
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(string) {
+      return String(string).replace(/&/g, '&amp;')
+                          .replace(/</g, '&lt;')
+                          .replace(/>/g, '&gt;')
+                          .replace(/"/g, '&quot;')
+                          .replace(/'/g, '&#39;');
+    }
+
+    // Event listeners
+    document.getElementById('send-btn').addEventListener('click', handleUserMessage);
+    document.getElementById('input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleUserMessage();
+      }
+    });
+
+    // Initial greeting from assistant
+    appendMessage('assistant', 'Hi! I’m Scoutly’s gift assistant. Tell me about the person you’re gifting for (interests, occasion, etc.) and I’ll recommend some gifts.');
+  </script>
+</body>
+</html>
